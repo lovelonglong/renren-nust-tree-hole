@@ -45,7 +45,9 @@ config.yaml中设置了cron的规则
 
     r'/(shuji)?', 'Home',
 
-那么你可以通过访问/shuji这个url来对你的管理员账号授权。
+那么你可以通过访问/shuji这个url来对你的管理员账号授权。授权成功后，在人人开放平台那里把回调地址修改成随便一个，这样就不会有人再授权成功了(因为授权的时候权限比较大)。
+
+授权的accesstoken已经在每天凌晨3点半的时候自动刷新，所以无需担心过期的问题。
 
 librenren.py中有3个地方根据申请到的api数据设置下(APIKEY, SECRET, CALLBACK\_URL, PAGE\_ID)。
 
