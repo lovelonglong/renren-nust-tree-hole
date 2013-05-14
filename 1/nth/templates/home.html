@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    ^ import 'utils.html' as utils
+    <meta charset="utf-8">
+    <title>南京理工树洞</title>
+    <link rel="shortcut icon" href="{{ static('img/icon/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ static('lib/bootstrap/css/bootstrap.css') }}">
+    <style>
+        html, body {
+            padding: 0;
+            margin: 0;
+            font-family: "微软雅黑", "文泉驿微米黑", arial, sans-serif, serif;
+        }
+        body {
+            margin: 0 auto;
+            text-align: center;
+            ^ set bg = static('img/bg.png')
+            background: url({{ bg }});
+            padding-top: 20px;
+            padding-bottom: 50px;
+            color: #08c;
+        }
+        textarea {
+            resize: none;
+            width: 200px;
+            height: 200px;
+        }
+        footer {
+            margin-top: 20px;
+        }
+        ^ set bigdot = static('img/bigdot.png')
+        ^ set dot = static('img/dot.gif')
+        #timeline {border-bottom: 1px solid #ddd;width: 760px;height: 200px;overflow: hidden;margin: 10px auto;position: relative;background: url({{ dot }}) left 45px repeat-x;}
+        #dates {width: 760px;height: 60px;overflow: hidden;}
+        #dates li {list-style: none;float: left;width: 100px;height: 50px;text-align: center;background: url({{ bigdot }}) center bottom no-repeat;}
+        #dates .selected {font-size: 16px;}
+        #issues {width: 760px;height: 200px;overflow: hidden;}  
+        #issues li {width: 760px;height: 200px;list-style: none;float: left;}
+        #issues li h1 {color: #ffcc00;font-size: 42px;text-shadow: #000 1px 1px 2px;}
+        #issues li p {font-size: 14px;margin-right: 70px; margin:10px; font-weight: normal;line-height: 22px;}
+
+    </style>
+</head>
+
+
+<body>
+<div class="content">
+    ^ if renren:
+    <a href="/connect/renren" class="btn btn-primary">人人连接</a>
+    ^ endif
+    <h2>南京理工树洞</h2>
+    <p><span class="rest">0</span>/<span>120</span></p>
+    <form onclick="return false;">
+        <textarea name="leaf"></textarea>
+        <div class="status">
+            <input type="submit" class="btn btn-primary" value="发布">
+            <span class="hide">发布成功</span>
+        </div>
+        <p><i>(服务器不会记录您的任何信息)</i></p>
+    </form>
+    <div id="timeline-wrap">
+        {{ utils.gen_msg(latest) }}
+    </div>
+</div>
+<footer>
+    ##<a href="http://gorthon.sinaapp.com" target="_blank">博客</a> |
+    <a href="http://page.renren.com/601730243" target="_blank">前往《南京理工树洞人人公共主页》围观</a>
+    ##<a href="http://weibo.com/imshuji" target="_blank">微博</a>
+</footer>
+
+
+<script src="{{ static('lib/jquery.js') }}"></script>
+<script src="{{ static('lib/jquery.timelinr-0.9.53.js') }}"></script>
+<script>
+$(function(){
+    var one_show_time = 6;
+    $().timelinr({
+        autoPlay: 'true',
+        autoPlayDirection: 'forward',
+        autoPlayPause: one_show_time * 1000
+    })
+    var $textarea = $('textarea').focus().on('input paste keydown keyup keypress', function(e){
+        var self = $(this)
+        var l = self.val().replace(/\n/g, '').length
+        $('.rest').text(l)
+        if(l > 150){
+            self.val(self.val().slice(0, 120)).focus()
+        }
+        if(l > 120){
+            $('.rest').css('color', 'red')
+        }else{
+            $('.rest').css('color', '#08c')
+        }
+    })
+    var $ok = $('.status span:last')
+    $('input:submit').click(function(e){
+        var self = $(this)
+        var l = $textarea.val().length
+        if(l < 5 || l > 120){
+            alert('内容的长度必须是5~120个字')
+            $textarea.focus()
+            return
+        }
+        if(self.hasClass('disabled')){
+            return false
+        }
+        e.preventDefault()
+        var data = $('form').serialize()
+        $textarea.val('').focus()
+        $('.rest').text('0')
+        $ok.show('fast')
+        var _ = setTimeout(function(){
+            $ok.hide('fast')
+            clearTimeout(_)
+        }, 4000)
+        $.post('/', data, function(){
+            update_timeline()
+            clearInterval(window._tid)
+            timer_timeline()
+        })
+    })
+    ## 40秒更新一次
+    var update_timeline = function(){
+        $('#timeline').load('/latest/msg', function(){
+            $().timelinr({
+                autoPlayDirection: 'forward'
+            })
+        })
+    }
+    var timer_timeline = function(){
+        window._tid = setInterval(function(){
+            update_timeline()
+        },  one_show_time * 1000 * 10)
+    }
+    timer_timeline()
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+^ macro gen_msg(latest, need_wrap=True)
+^ if need_wrap:
+<div id="timeline">
+^ endif
+    ^ set latest = latest.all()[::-1]
+    <ul id="dates">
+        ^ for msg in latest:
+        <li><a href="#msg{{ loop.index }}">{{ msg.date }}</a></li>
+        ^ endfor
+    </ul>
+    <ul id="issues">
+        ^ for msg in latest:
+        <li id="msg{{ loop.index }}">
+            <h1>#{{ msg.pk }}</h1>
+            <p>{{ msg.content }}</p>
+        </li>
+        ^ endfor
+    </ul>
+^ if need_wrap:
+</div>
+^ endif
+^ endmacro

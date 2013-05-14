@@ -1,0 +1,23 @@
+@import "base.less";
+
+/* 改变下拉菜单颜色 */
+.dropdown-menu li > a:hover {
+    color: black;
+    background-color: #e9e9e9;
+    background-image: -moz-linear-gradient(top, #eee, #e1e1e1);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#eee), to(#e1e1e1));
+    background-image: -webkit-linear-gradient(top, #eee, #e1e1e1);
+    background-image: -o-linear-gradient(top, #eee, #e1e1e1);
+    background-image: linear-gradient(to bottom, #eee, #e1e1e1);
+    /* 图标不要变成白色的 */
+    [class^="icon-"], [class*="icon-"] {
+        //background-image: url(/static/3rd/bootstrap/img/glyphicons-halflings.png);
+    }
+}
+
+/* 导航栏菜单hover时候 */
+.navbar .nav > li > a:hover {
+    background-color: #eee;
+    color: #333;
+}
+

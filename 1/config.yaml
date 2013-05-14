@@ -1,0 +1,14 @@
+---
+name: nusttreehole
+version: 1
+
+cron:
+- description: 每天早上刷新access token
+  url: cron/refresh/token
+  schedule: every day of month 03:30
+- description: 每隔2分钟发送一次新消息[人人限制为1次/2分钟]
+  url: cron/post/renren
+  schedule: every 2 mins
+- description: 每隔15分钟登录一次
+  url: cron/keep/cookie
+  schedule: every 15 mins
