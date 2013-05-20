@@ -1,7 +1,7 @@
 renren-nust-tree-hole
 =====================
 
-人人公共主页树洞(搭建于SAE)
+人人公共主页树洞(搭建于SAE), demo地址：http://nusttreehole.sinaapp.com/
 
 开发环境:
 
